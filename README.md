@@ -175,7 +175,7 @@ Diambil dari aplikasi yang berjalan di emulator/HP Android (bukan mockup). Minim
 
 | Poin | File:baris | Keterangan |
 |------|-----------|------------|
-| POST ulasan ke server (+5) | server/bin/server.dart:50 + lib/service/kos_service.dart:41 + lib/halaman/halaman_detail_kos.dart:85 | Dikerjakan. Server memvalidasi kosId, rating 1–5, komentar (400 bila tidak valid, 201 bila berhasil). Aplikasi tetap menyimpan ulasan lokal lalu mengirim POST; SnackBar "Ulasan terkirim ke server" atau "Gagal mengirim, ulasan disimpan di perangkat" tanpa crash. Diuji di test/kirim_ulasan_test.dart |
+| POST ulasan ke server (+5) | server/bin/server.dart:50 + lib/service/kos_service.dart:41 + lib/halaman/halaman_detail_kos.dart:85 | Dikerjakan. Server memvalidasi kosId (404 bila kos tidak ada), rating bilangan bulat 1–5, komentar, dan tanggal ISO 8601 (400 bila tidak valid, 201 bila berhasil). Aplikasi tetap menyimpan ulasan lokal lalu mengirim POST; SnackBar "Ulasan terkirim ke server" atau "Gagal mengirim, ulasan disimpan di perangkat" tanpa crash. Diuji di test/kirim_ulasan_test.dart |
 | Pull-to-refresh (+2) | lib/halaman/tab_cari.dart:154 (daftar), :78 (keadaan kosong/gagal) | Dikerjakan. Tarik ke bawah memanggil `muatUlang()` di HalamanUtama; indikator berhenti saat data selesai dimuat; keadaan gagal juga bisa ditarik. Diuji di test/pull_to_refresh_test.dart |
 | Hero kartu → detail (+3) | lib/widget/kartu_kos.dart:58 + lib/halaman/halaman_detail_kos.dart:105 | Dikerjakan. Tag per tab (`cari-<id>`, `favorit-<id>`) agar tidak bentrok di IndexedStack. Diuji di test/hero_kartu_detail_test.dart |
 
