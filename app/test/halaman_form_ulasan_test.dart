@@ -3,63 +3,55 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:kosdekat/halaman/halaman_form_ulasan.dart';
-import 'package:kosdekat/model/kos.dart';
 import 'package:kosdekat/model/ulasan.dart';
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  final kosContoh = Kos(
-    id: 'k-01',
-    nama: 'Kos Melati Indah (contoh)',
-    area: 'Sukapura',
-    tipe: 'Putri',
-    hargaBulanan: 1250000,
-    kamarMandiDalam: true,
-    jarakKm: 0.8,
-    diperbarui: DateTime(2026, 10, 28),
+  const kosId = 'k-01';
+  const namaKos = 'Kos Melati Indah (contoh)';
+
+  Widget buatHalaman() => const MaterialApp(
+    home: HalamanFormUlasan(kosId: kosId, namaKos: namaKos),
   );
 
-  Widget buatHalaman() => MaterialApp(home: HalamanFormUlasan(kos: kosContoh));
+  Future<void> kirim(WidgetTester tester) async {
+    await tester.ensureVisible(find.text('Kirim Ulasan'));
+    await tester.tap(find.text('Kirim Ulasan'));
+    await tester.pumpAndSettle();
+  }
 
-  testWidgets('nama kos otomatis terisi dan readOnly', (tester) async {
+  testWidgets('nama kos tampil di form', (tester) async {
     await tester.pumpWidget(buatHalaman());
-    expect(find.text('Kos Melati Indah (contoh)'), findsOneWidget);
+    expect(find.text(namaKos), findsOneWidget);
   });
 
   testWidgets('mengetuk bintang ke-4 menyalakan 4 bintang', (tester) async {
     await tester.pumpWidget(buatHalaman());
 
-    // Ketuk bintang ke-4 (tooltip "Rating 4 bintang")
     await tester.tap(find.byTooltip('Rating 4 bintang'));
     await tester.pump();
 
-    // Harus ada 4 ikon star (menyala) dan 1 ikon star_border (mati)
     expect(find.byIcon(Icons.star), findsNWidgets(4));
     expect(find.byIcon(Icons.star_border), findsOneWidget);
   });
 
-  testWidgets('kirim tanpa rating menampilkan SnackBar', (tester) async {
+  testWidgets('kirim tanpa komentar ditolak', (tester) async {
     await tester.pumpWidget(buatHalaman());
 
-    // Isi komentar tapi jangan beri rating
-    await tester.enterText(find.byType(TextField).last, 'Bagus sekali');
-    await tester.tap(find.text('Kirim Ulasan'));
-    await tester.pump();
+    await kirim(tester);
 
-    expect(find.text('Beri bintang dan komentar dulu'), findsOneWidget);
+    expect(find.text('Komentar tidak boleh kosong'), findsOneWidget);
+    expect(find.byType(HalamanFormUlasan), findsOneWidget);
   });
 
-  testWidgets('kirim tanpa komentar menampilkan SnackBar', (tester) async {
+  testWidgets('komentar kurang dari 5 karakter ditolak', (tester) async {
     await tester.pumpWidget(buatHalaman());
 
-    // Beri rating tapi jangan isi komentar
-    await tester.tap(find.byTooltip('Rating 3 bintang'));
-    await tester.pump();
-    await tester.tap(find.text('Kirim Ulasan'));
-    await tester.pump();
+    await tester.enterText(find.byType(TextField).last, 'oke');
+    await kirim(tester);
 
-    expect(find.text('Beri bintang dan komentar dulu'), findsOneWidget);
+    expect(find.text('Komentar minimal 5 karakter'), findsOneWidget);
   });
 
   testWidgets('kirim valid menutup halaman dengan objek Ulasan', (
@@ -75,7 +67,8 @@ void main() {
               hasilPop = await Navigator.push<Ulasan>(
                 ctx,
                 MaterialPageRoute(
-                  builder: (_) => HalamanFormUlasan(kos: kosContoh),
+                  builder: (_) =>
+                      const HalamanFormUlasan(kosId: kosId, namaKos: namaKos),
                 ),
               );
             },
@@ -85,29 +78,22 @@ void main() {
       ),
     );
 
-    // Buka halaman form
     await tester.tap(find.text('Buka Form'));
     await tester.pumpAndSettle();
 
-    // Beri rating 5
-    await tester.tap(find.byTooltip('Rating 5 bintang'));
+    await tester.tap(find.byTooltip('Rating 3 bintang'));
     await tester.pump();
-
-    // Isi komentar
     await tester.enterText(
       find.byType(TextField).last,
       'Lokasi strategis, kamar bersih',
     );
+    await kirim(tester);
 
-    // Kirim
-    await tester.tap(find.text('Kirim Ulasan'));
-    await tester.pumpAndSettle();
-
-    // Halaman sudah tertutup dan hasilPop berisi Ulasan yang benar
+    expect(find.byType(HalamanFormUlasan), findsNothing);
     expect(hasilPop, isNotNull);
-    expect(hasilPop!.kosId, 'k-01');
-    expect(hasilPop!.namaKos, 'Kos Melati Indah (contoh)');
-    expect(hasilPop!.rating, 5);
+    expect(hasilPop!.kosId, kosId);
+    expect(hasilPop!.namaKos, namaKos);
+    expect(hasilPop!.rating, 3);
     expect(hasilPop!.komentar, 'Lokasi strategis, kamar bersih');
   });
 }
