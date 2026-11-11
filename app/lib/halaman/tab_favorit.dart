@@ -14,6 +14,9 @@ class TabFavorit extends StatelessWidget {
     this.daftarUlasan = const [],
     this.onUlasanBaru,
     this.onToggleFavorit,
+    this.daftarUlasan = const [],
+    this.onUlasanBaru,
+    this.kirimUlasan,
   });
 
   final Future<List<Kos>> futureKos;
@@ -21,6 +24,9 @@ class TabFavorit extends StatelessWidget {
   final List<Ulasan> daftarUlasan;
   final ValueChanged<Ulasan>? onUlasanBaru;
   final void Function(String id)? onToggleFavorit;
+  final List<Ulasan> daftarUlasan;
+  final ValueChanged<Ulasan>? onUlasanBaru;
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +80,10 @@ class TabFavorit extends StatelessWidget {
                   kos: kos,
                   daftarUlasan: daftarUlasan,
                   onUlasanBaru: onUlasanBaru,
+                  kirimUlasan: kirimUlasan,
                   isFavorit: true,
                   onToggleFavorit: () => onToggleFavorit?.call(kos.id),
+                  heroTag: 'favorit-${kos.id}',
                 ),
               ),
           ],

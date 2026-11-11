@@ -41,6 +41,9 @@ class TabCari extends StatefulWidget {
     this.onUlasanBaru,
     this.onToggleFavorit,
     this.onMuatUlang,
+    this.daftarUlasan = const [],
+    this.onUlasanBaru,
+    this.kirimUlasan,
   });
 
   final Future<List<Kos>> futureKos;
@@ -49,6 +52,9 @@ class TabCari extends StatefulWidget {
   final ValueChanged<Ulasan>? onUlasanBaru;
   final void Function(String id)? onToggleFavorit;
   final Future<void> Function()? onMuatUlang;
+  final List<Ulasan> daftarUlasan;
+  final ValueChanged<Ulasan>? onUlasanBaru;
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
 
   @override
   State<TabCari> createState() => _TabCariState();
@@ -207,8 +213,11 @@ class _TabCariState extends State<TabCari> {
                 kos: kos,
                 daftarUlasan: widget.daftarUlasan,
                 onUlasanBaru: widget.onUlasanBaru,
+                kirimUlasan: widget.kirimUlasan,
                 isFavorit: widget.idFavorit.contains(kos.id),
                 onToggleFavorit: () => widget.onToggleFavorit?.call(kos.id),
+                // Prefix per tab: tab Favorit hidup bersamaan di IndexedStack.
+                heroTag: 'cari-${kos.id}',
               );
             },
           ),

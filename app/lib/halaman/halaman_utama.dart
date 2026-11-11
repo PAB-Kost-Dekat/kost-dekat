@@ -93,6 +93,9 @@ class HalamanUtamaState extends State<HalamanUtama> {
               onUlasanBaru: tambahUlasan,
               onToggleFavorit: toggleFavorit,
               onMuatUlang: muatUlang,
+              daftarUlasan: _daftarUlasan,
+              onUlasanBaru: tambahUlasan,
+              kirimUlasan: _service.kirimUlasan,
             ),
             TabFavorit(
               futureKos: _futureKos,
@@ -100,6 +103,9 @@ class HalamanUtamaState extends State<HalamanUtama> {
               daftarUlasan: _daftarUlasan,
               onUlasanBaru: tambahUlasan,
               onToggleFavorit: toggleFavorit,
+              daftarUlasan: _daftarUlasan,
+              onUlasanBaru: tambahUlasan,
+              kirimUlasan: _service.kirimUlasan,
             ),
             TabProfil(
               namaPengguna: widget.namaPengguna,
