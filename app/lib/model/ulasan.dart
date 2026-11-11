@@ -5,7 +5,6 @@ class Ulasan {
     required this.rating,
     required this.komentar,
     required this.tanggal,
-  });
   }) : assert(rating >= 1 && rating <= 5);
 
   final String kosId;
@@ -18,8 +17,6 @@ class Ulasan {
     kosId: json['kosId'] as String,
     namaKos: json['namaKos'] as String? ?? '',
     rating: (json['rating'] as num).toInt(),
-    namaKos: json['namaKos'] as String,
-    rating: json['rating'] as int,
     komentar: json['komentar'] as String,
     tanggal: DateTime.parse(json['tanggal'] as String),
   );

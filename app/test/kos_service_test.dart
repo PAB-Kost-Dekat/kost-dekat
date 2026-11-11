@@ -10,7 +10,6 @@ void main() {
   const kos = {
     'id': '1',
     'nama': 'Kos Melati Indah (contoh)',
-    'nama': 'Kos Melati',
     'area': 'Sukapura',
     'tipe': 'Putri',
     'hargaBulanan': 1200000,
@@ -31,15 +30,11 @@ void main() {
   const area = {'area': 'Sukapura', 'jumlahKos': 2, 'hargaRataRata': 1050000};
 
   test('memuat dua kos Sukapura beserta detail dan ringkasan area', () async {
-  const area = {'area': 'Sukapura', 'jumlahKos': 1, 'hargaRataRata': 1200000};
-
-  test('memuat daftar kos, detail, dan ringkasan area', () async {
     final client = MockClient((request) async {
       expect(request.method, 'GET');
       expect(request.url.origin, baseUrl);
       final data = switch (request.url.path) {
         '/kos' => [kos, kosKedua],
-        '/kos' => [kos],
         '/kos/1' => kos,
         '/area' => [area],
         _ => throw StateError('Endpoint tidak dikenal: ${request.url}'),
@@ -74,12 +69,6 @@ void main() {
     final service = KosService(client: client, baseUrl: baseUrl);
 
     await expectLater(service.ambilDaftarKos(), throwsException);
-    expect((await service.ambilDaftarKos()).single.jarakKm, 1.0);
-    expect((await service.ambilKos('1')).nama, 'Kos Melati');
-    final ringkasan = (await service.ambilRingkasanArea()).single;
-    expect(ringkasan.area, 'Sukapura');
-    expect(ringkasan.jumlahKos, 1);
-    expect(ringkasan.hargaRataRata, 1200000);
   });
 
   test('melempar Exception dengan kode status selain 200', () async {
