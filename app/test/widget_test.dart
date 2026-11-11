@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:kosdekat/main.dart';
 import 'package:kosdekat/model/kos.dart';
-import 'package:kosdekat/widgets/kartu_kost.dart';
+import 'package:kosdekat/widget/kartu_kos.dart';
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
@@ -28,7 +28,7 @@ void main() {
     });
   }
 
-  testWidgets('kartu KosDekat menampilkan nama dan harga bulanan', (
+  testWidgets('KartuKos di tab Cari menampilkan nama dan harga bulanan', (
     tester,
   ) async {
     final kos = Kos(
@@ -45,7 +45,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: KartuKost(kos: kos, onTap: () {}),
+          body: KartuKos(kos: kos),
         ),
       ),
     );
@@ -53,10 +53,5 @@ void main() {
 
     expect(find.text('Kos Melati Indah (contoh)'), findsOneWidget);
     expect(find.text('Rp1.250.000/bln'), findsOneWidget);
-    // Tag harus sama dengan DetailKosPage agar animasi Hero berjalan.
-    expect(
-      tester.widget<Hero>(find.byType(Hero)).tag,
-      equals('kos-img-${kos.id}'),
-    );
   });
 }

@@ -144,7 +144,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P05 Halaman detail menerima objek lewat konstruktor | lib/halaman/halaman_detail_kos.dart:_ | `HalamanDetailKos(kos: ...)` |
 | P05 Form tambah → `Navigator.pop(context, data)` → `await` → muncul di daftar | lib/halaman/halaman_detail_kos.dart:_ | Ulasan tampil di Detail & Profil |
 | P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:_ | `if (!mounted) return;` |
-| P05 ≥3 widget test | `test/widget_test.dart:10,29` dan `test/halaman_login_test.dart:30,43,54,78,105` | 8 widget test (2 tema, 1 kartu kos, 5 login dan Profil) |
+| P05 ≥3 widget test | `test/widget_test.dart:13,31`, `test/halaman_login_test.dart:30,43,54,78,105`, dan `test/ulasan_integrasi_test.dart:17` | 10 skenario widget pada tiga file ini (2 tema, 1 KartuKos, 5 login dan Profil, 2 alur ulasan dari Cari/Favorit); jalankan `flutter test` untuk verifikasi |
 | P06 ColorScheme.fromSeed + darkTheme | lib/tema/tema_kosdekat.dart:_ | Seed `#______` |
 | P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/_:_ | Pengecualian: warna bintang |
 | P06 Font kustom | pubspec.yaml:_ | _nama font_ |

@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:kosdekat/halaman/halaman_utama.dart';
+import 'package:kosdekat/halaman/tab_profil.dart';
 import 'package:kosdekat/service/kos_service.dart';
 import 'package:kosdekat/widget/kartu_kos.dart';
 
@@ -84,6 +85,14 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Ulasan Saya (1)'), findsOneWidget);
         expect(find.text(komentar), findsOneWidget);
+        final ulasanProfil = tester
+            .widget<TabProfil>(find.byType(TabProfil))
+            .daftarUlasan
+            .single;
+        expect(ulasanProfil.kosId, 'kos-1');
+        expect(ulasanProfil.namaKos, 'Kos Melati Sukapura');
+        expect(ulasanProfil.rating, 4);
+        expect(ulasanProfil.komentar, komentar);
 
         // Kedua jalur membuka ulang detail dari daftar ulasan yang sama.
         for (final tab in ['Cari', 'Favorit']) {
