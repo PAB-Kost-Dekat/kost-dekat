@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:kosdekat/main.dart';
 import 'package:kosdekat/services/api_service.dart';
+import 'package:kosdekat/model/kos.dart';
+import 'package:kosdekat/widgets/kartu_kost.dart';
 
 void main() {
   setUpAll(() {
@@ -18,5 +20,32 @@ void main() {
     await tester.pumpWidget(KosDekatApp(api: api));
     expect(find.text('KosDekat'), findsOneWidget);
     api.dispose();
+  }
+
+  testWidgets('kartu KosDekat menampilkan nama dan harga bulanan', (
+    tester,
+  ) async {
+    final kos = Kos(
+      id: '1',
+      nama: 'Kos Melati Indah (contoh)',
+      area: 'Sukapura',
+      tipe: 'Putri',
+      hargaBulanan: 1250000,
+      kamarMandiDalam: true,
+      jarakKm: 0.8,
+      diperbarui: DateTime(2026, 10, 28),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: KartuKost(kos: kos, onTap: () {}),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Kos Melati Indah (contoh)'), findsOneWidget);
+    expect(find.text('Rp1.250.000/bln'), findsOneWidget);
   });
 }

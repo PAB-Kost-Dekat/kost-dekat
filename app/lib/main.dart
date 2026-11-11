@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'screens/home_page.dart';
 import 'services/api_service.dart';
+
+import 'halaman/halaman_login.dart';
+import 'service/kos_service.dart';
 import 'tema/tema_kosdekat.dart';
 
 const apiUrl = String.fromEnvironment(
@@ -29,6 +32,19 @@ class KosDekatApp extends StatelessWidget {
           home: HomePage(api: api),
         );
       },
+  const KosDekatApp({super.key, this.home, this.kosService});
+
+  final Widget? home;
+  final KosService? kosService;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'KosDekat',
+      theme: temaTerang,
+      darkTheme: temaGelap,
+      themeMode: ThemeMode.system,
+      home: home ?? HalamanLogin(kosService: kosService),
     );
   }
 }

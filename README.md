@@ -135,11 +135,11 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P04 Model ≥ 6 field (DateTime & bool) | lib/model/kos.dart:_ | 8 field, `diperbarui` DateTime, `kamarMandiDalam` bool |
 | P04 Kartu buatan sendiri (Row, Column, Expanded, Stack) | lib/widget/kartu_kos.dart:_ | `KartuKos` |
 | P04 ListView.builder | lib/halaman/tab_cari.dart:_ | Daftar kos |
-| P04 NavigationBar ≥ 3 tab + IndexedStack | lib/halaman/halaman_utama.dart:_ | Cari · Favorit · Profil |
+| P04 NavigationBar ≥ 3 tab + IndexedStack | lib/halaman/halaman_utama.dart:73-112 | Cari · Favorit · Profil |
 | P05 Halaman detail menerima objek lewat konstruktor | lib/halaman/halaman_detail_kos.dart:_ | `HalamanDetailKos(kos: ...)` |
 | P05 Form tambah → `Navigator.pop(context, data)` → `await` → muncul di daftar | lib/halaman/halaman_detail_kos.dart:_ | Ulasan tampil di Detail & Profil |
 | P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:_ | `if (!mounted) return;` |
-| P05 ≥ 3 widget test di `test/`, `flutter test` lulus semua | test/widget_test.dart:_ | _n_ widget test |
+| P05 ≥3 widget test | `test/widget_test.dart:10,29` dan `test/halaman_login_test.dart:30,43,54,78,105` | 8 widget test (2 tema, 1 kartu kos, 5 login dan Profil) |
 | P06 ColorScheme.fromSeed + darkTheme | lib/tema/tema_kosdekat.dart:_ | Seed `#______` |
 | P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/_:_ | Pengecualian: warna bintang |
 | P06 Font kustom | pubspec.yaml:_ | _nama font_ |
@@ -150,6 +150,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P07 http + dart-define | lib/service/kos_service.dart:8 | API_URL dari `--dart-define` |
 | P07 fromJson/toJson + konversi DateTime | lib/model/kos.dart:_ | ISO 8601 |
 | P07 FutureBuilder 3 keadaan + tombol Coba lagi | lib/halaman/tab_cari.dart:_ | memuat / gagal / berhasil |
+| P07 Test MockClient | test/kos_service_test.dart:32 | Menguji KosService tanpa server |
 | P07 Minimal satu test memakai MockClient | test/kos_service_test.dart | Menguji `KosService` tanpa server |
 
 ### 10.2 Fitur khas KosDekat (Bagian 5)
@@ -157,7 +158,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | Poin | File:baris | Keterangan |
 |------|-----------|------------|
 | Model `Kos` sesuai tema | lib/model/kos.dart:_ | id, nama, area, tipe, hargaBulanan, kamarMandiDalam, jarakKm, diperbarui |
-| Tab Cari · Favorit · Profil | lib/halaman/halaman_utama.dart:_ | |
+| Tab Cari · Favorit · Profil | lib/halaman/halaman_utama.dart:73-112 | NavigationBar 3 tab + IndexedStack |
 | Form ulasan: nama kos, rating 1–5 bintang yang bisa diketuk, komentar | lib/halaman/halaman_form_ulasan.dart:_ | Model `Ulasan` terpisah |
 | SegmentedButton Putra/Putri/Campur | lib/halaman/tab_cari.dart:_ | |
 | Urutan berdasarkan harga atau jarak | lib/halaman/tab_cari.dart:_ | Termurah / Terdekat |

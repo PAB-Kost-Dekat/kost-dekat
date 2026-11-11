@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/ulasan.dart';
 import 'halaman_login.dart';
 
 // shortcut: hanya identitas + Keluar; "Ulasan saya" dan switch mode gelap menyusul di SCRUM-32.
@@ -8,10 +9,12 @@ class TabProfil extends StatelessWidget {
     super.key,
     required this.namaPengguna,
     required this.emailPengguna,
+    this.daftarUlasan = const [],
   });
 
   final String namaPengguna;
   final String emailPengguna;
+  final List<Ulasan> daftarUlasan;
 
   String get _inisial => namaPengguna
       .trim()

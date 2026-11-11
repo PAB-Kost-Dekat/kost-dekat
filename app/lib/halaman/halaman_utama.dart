@@ -1,45 +1,100 @@
 import 'package:flutter/material.dart';
 
+import '../model/kos.dart';
+import '../model/ulasan.dart';
+import '../service/kos_service.dart';
+import 'tab_cari.dart';
+import 'tab_favorit.dart';
 import 'tab_profil.dart';
 
-/// Pemilik state tab. NavigationBar + IndexedStack agar keadaan tiap tab tetap.
-// shortcut: belum menerima KosService dan tab Cari/Favorit masih placeholder; lengkapi di SCRUM-19, 22, 27, 31.
+/// Pemilik state bersama: tab aktif, Future kos, id favorit, dan daftar ulasan.
+/// Menggunakan NavigationBar + IndexedStack agar posisi scroll dan state tiap tab tetap terjaga.
 class HalamanUtama extends StatefulWidget {
   const HalamanUtama({
     super.key,
+    this.kosService,
     this.namaPengguna = 'Mahasiswa Tel-U',
     this.emailPengguna = '',
   });
 
+  final KosService? kosService;
   final String namaPengguna;
   final String emailPengguna;
 
   @override
-  State<HalamanUtama> createState() => _HalamanUtamaState();
+  State<HalamanUtama> createState() => HalamanUtamaState();
 }
 
-class _HalamanUtamaState extends State<HalamanUtama> {
-  int _indeksTab = 0;
+class HalamanUtamaState extends State<HalamanUtama> {
+  late final KosService _service;
+  int _indexTab = 0;
+  late Future<List<Kos>> _futureKos;
+  final Set<String> _idFavorit = <String>{};
+  final List<Ulasan> _daftarUlasan = <Ulasan>[];
+
+  int get indexTab => _indexTab;
+  Future<List<Kos>> get futureKos => _futureKos;
+  Set<String> get idFavorit => _idFavorit;
+  List<Ulasan> get daftarUlasan => _daftarUlasan;
+
+  @override
+  void initState() {
+    super.initState();
+    _service = widget.kosService ?? KosService();
+    _futureKos = _service.ambilDaftarKos();
+  }
+
+  void toggleFavorit(String id) {
+    setState(() {
+      if (_idFavorit.contains(id)) {
+        _idFavorit.remove(id);
+      } else {
+        _idFavorit.add(id);
+      }
+    });
+  }
+
+  void tambahUlasan(Ulasan u) {
+    setState(() {
+      _daftarUlasan.add(u);
+    });
+  }
+
+  void muatUlang() {
+    setState(() {
+      _futureKos = _service.ambilDaftarKos();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: IndexedStack(
-          index: _indeksTab,
+          index: _indexTab,
           children: [
-            const _TabSementara(judul: 'Cari kos', tiket: 'SCRUM-22'),
-            const _TabSementara(judul: 'Favorit', tiket: 'SCRUM-31'),
+            TabCari(
+              futureKos: _futureKos,
+              idFavorit: _idFavorit,
+              onToggleFavorit: toggleFavorit,
+              onMuatUlang: muatUlang,
+            ),
+            TabFavorit(
+              futureKos: _futureKos,
+              idFavorit: _idFavorit,
+              onToggleFavorit: toggleFavorit,
+            ),
             TabProfil(
               namaPengguna: widget.namaPengguna,
               emailPengguna: widget.emailPengguna,
+              daftarUlasan: _daftarUlasan,
             ),
           ],
         ),
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _indeksTab,
-        onDestinationSelected: (indeks) => setState(() => _indeksTab = indeks),
+        selectedIndex: _indexTab,
+        onDestinationSelected: (i) => setState(() => _indexTab = i),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.search), label: 'Cari'),
           NavigationDestination(
@@ -51,34 +106,6 @@ class _HalamanUtamaState extends State<HalamanUtama> {
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
             label: 'Profil',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TabSementara extends StatelessWidget {
-  const _TabSementara({required this.judul, required this.tiket});
-
-  final String judul;
-  final String tiket;
-
-  @override
-  Widget build(BuildContext context) {
-    final teks = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(judul, style: teks.headlineMedium),
-          const SizedBox(height: 8),
-          Text(
-            'Bagian ini sedang dibuat ($tiket).',
-            style: teks.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
           ),
         ],
       ),
