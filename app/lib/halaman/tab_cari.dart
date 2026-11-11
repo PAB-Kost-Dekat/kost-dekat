@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../model/kos.dart';
 import '../utils/format_rupiah.dart';
+import '../widget/kartu_kos.dart';
 
 /// Tab Cari yang menampilkan daftar kos dan keadaan memuat/gagal/berhasil.
 /// Kerangka ini menjadi fondasi bagi A3 untuk melengkapi filter & fitur khas (SCRUM-22).
@@ -96,6 +97,17 @@ class TabCari extends StatelessWidget {
           itemBuilder: (context, index) {
             final kos = data[index];
             final isFav = idFavorit.contains(kos.id);
+            return KartuKos(
+              kos: kos,
+              isFavorit: isFav,
+              onToggleFavorit: () => onToggleFavorit?.call(kos.id),
+            );
+          },
+        );
+      },
+    );
+  }
+}
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
               child: ListTile(

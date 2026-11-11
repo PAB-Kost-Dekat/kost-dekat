@@ -133,9 +133,13 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P03 ChoiceChip / FilterChip / SegmentedButton | lib/halaman/tab_cari.dart:_ | SegmentedButton tipe kos |
 | P03 SnackBar | lib/_:_ | "Ulasan tersimpan" |
 | P04 Model ≥ 6 field (DateTime & bool) | lib/model/kos.dart:_ | 8 field, `diperbarui` DateTime, `kamarMandiDalam` bool |
-| P04 Kartu buatan sendiri (Row, Column, Expanded, Stack) | lib/widget/kartu_kos.dart:_ | `KartuKos` |
+| P04 Kartu buatan sendiri (Row, Column, Expanded, Stack) | lib/widget/kartu_kos.dart:55-190 | `KartuKos` |
 | P04 ListView.builder | lib/halaman/tab_cari.dart:_ | Daftar kos |
 | P04 NavigationBar ≥ 3 tab + IndexedStack | lib/halaman/halaman_utama.dart:73-112 | Cari · Favorit · Profil |
+| P05 Halaman detail menerima objek lewat konstruktor | lib/halaman/halaman_detail_kos.dart:12-19 + lib/widget/kartu_kos.dart:35 | `HalamanDetailKos(kos: ...)` |
+| P05 Form tambah → `Navigator.pop(context, data)` → `await` → muncul di daftar | lib/halaman/halaman_detail_kos.dart:_ | Ulasan tampil di Detail & Profil |
+| P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:59 | `if (!mounted) return;` |
+| P05 ≥ 3 widget test di `test/`, `flutter test` lulus semua | test/widget_test.dart:_ | _n_ widget test |
 | P05 Halaman detail menerima objek lewat konstruktor | lib/halaman/halaman_detail_kos.dart:_ | `HalamanDetailKos(kos: ...)` |
 | P05 Form tambah → `Navigator.pop(context, data)` → `await` → muncul di daftar | lib/halaman/halaman_detail_kos.dart:_ | Ulasan tampil di Detail & Profil |
 | P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:_ | `if (!mounted) return;` |
@@ -162,7 +166,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | Form ulasan: nama kos, rating 1–5 bintang yang bisa diketuk, komentar | lib/halaman/halaman_form_ulasan.dart:_ | Model `Ulasan` terpisah |
 | SegmentedButton Putra/Putri/Campur | lib/halaman/tab_cari.dart:_ | |
 | Urutan berdasarkan harga atau jarak | lib/halaman/tab_cari.dart:_ | Termurah / Terdekat |
-| Harga format Rupiah "Rp1.250.000/bln" | lib/util/format_rupiah.dart:_ | Diuji di test/format_rupiah_test.dart |
+| Harga format Rupiah "Rp1.250.000/bln" | lib/util/format_rupiah.dart:1 | Diuji di test/format_rupiah_test.dart |
 | Endpoint khas `GET /area` | server/bin/server.dart:_ | Dipakai di lib/widget/ringkasan_area.dart |
 
 ### 10.3 Nilai tambah (Bagian 7)

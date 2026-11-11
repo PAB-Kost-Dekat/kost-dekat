@@ -20,3 +20,6 @@ class CurrencyUtils {
     return formatted;
   }
 }
+
+String formatRupiah(num number, {bool includePeriod = true}) =>
+    CurrencyUtils.formatRupiah(number, includePeriod: includePeriod);
