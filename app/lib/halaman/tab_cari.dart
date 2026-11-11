@@ -43,7 +43,7 @@ class TabCari extends StatefulWidget {
   final Future<List<Kos>> futureKos;
   final Set<String> idFavorit;
   final void Function(String id)? onToggleFavorit;
-  final VoidCallback? onMuatUlang;
+  final Future<void> Function()? onMuatUlang;
 
   @override
   State<TabCari> createState() => _TabCariState();
@@ -59,6 +59,24 @@ class _TabCariState extends State<TabCari> {
         _area = null;
       });
 
+  Future<void> _tarikUlang() async {
+    try {
+      await widget.onMuatUlang?.call();
+    } catch (_) {
+      // Galat ditampilkan oleh FutureBuilder; di sini cukup hentikan indikator.
+    }
+  }
+
+  /// Pesan kosong/gagal tetap di dalam ListView agar bisa ditarik untuk muat ulang.
+  Widget _pesanBisaDitarik(List<Widget> isi) => RefreshIndicator(
+        onRefresh: _tarikUlang,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(24, 96, 24, 24),
+          children: isi,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final teks = Theme.of(context).textTheme;
@@ -67,66 +85,54 @@ class _TabCariState extends State<TabCari> {
     return FutureBuilder<List<Kos>>(
       future: widget.futureKos,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        // Saat menarik ulang, data lama tetap tampil; spinner hanya di muatan pertama.
+        if (snapshot.connectionState == ConnectionState.waiting &&
+            !snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.cloud_off, size: 48, color: warna.error),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Gagal memuat data kos.',
-                    style: teks.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: widget.onMuatUlang,
-                    child: const Text('Coba lagi'),
-                  ),
-                ],
+          return _pesanBisaDitarik([
+            Icon(Icons.cloud_off, size: 48, color: warna.error),
+            const SizedBox(height: 16),
+            Text(
+              'Gagal memuat data kos.',
+              style: teks.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: FilledButton(
+                onPressed: widget.onMuatUlang,
+                child: const Text('Coba lagi'),
               ),
             ),
-          );
+          ]);
         }
 
         final data = snapshot.data ?? [];
 
         if (data.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Belum ada kos yang terdaftar.',
-                    style: teks.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Data kos dari server masih kosong. Muat ulang setelah data ditambahkan.',
-                    style: teks.bodyMedium?.copyWith(
-                      color: warna.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: widget.onMuatUlang,
-                    child: const Text('Muat ulang'),
-                  ),
-                ],
+          return _pesanBisaDitarik([
+            Text(
+              'Belum ada kos yang terdaftar.',
+              style: teks.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Data kos dari server masih kosong. Tarik ke bawah atau muat ulang setelah data ditambahkan.',
+              style: teks.bodyMedium?.copyWith(color: warna.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: FilledButton(
+                onPressed: widget.onMuatUlang,
+                child: const Text('Muat ulang'),
               ),
             ),
-          );
+          ]);
         }
 
         final areas = data.map((k) => k.area).toSet().toList()..sort();
@@ -138,63 +144,67 @@ class _TabCariState extends State<TabCari> {
         );
 
         // Filter ikut di dalam list agar ikut tergulir dan posisi gulir tetap.
-        return ListView.builder(
-          key: const PageStorageKey<String>('list_tab_cari'),
-          padding: const EdgeInsets.only(top: 8, bottom: 16),
-          itemCount: 1 + (hasil.isEmpty ? 1 : hasil.length),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  KategoriSegmentedButton(
-                    selectedFilter: _tipe,
-                    onSelectionChanged: (t) => setState(() => _tipe = t),
-                  ),
-                  AreaChipList(
-                    areas: areas,
-                    selectedArea: _area,
-                    onAreaSelected: (a) => setState(() => _area = a),
-                  ),
-                  SortSelector(
-                    currentSort: _urutan,
-                    onSortChanged: (u) => setState(
-                      () => _urutan = u ?? SortOption.jarakTerdekat,
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            if (hasil.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
+        return RefreshIndicator(
+          onRefresh: _tarikUlang,
+          child: ListView.builder(
+            key: const PageStorageKey<String>('list_tab_cari'),
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(top: 8, bottom: 16),
+            itemCount: 1 + (hasil.isEmpty ? 1 : hasil.length),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Tidak ada kos yang cocok dengan filter ini.',
-                      style: teks.bodyMedium?.copyWith(
-                        color: warna.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
+                    KategoriSegmentedButton(
+                      selectedFilter: _tipe,
+                      onSelectionChanged: (t) => setState(() => _tipe = t),
                     ),
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: _resetFilter,
-                      child: const Text('Tampilkan semua kos'),
+                    AreaChipList(
+                      areas: areas,
+                      selectedArea: _area,
+                      onAreaSelected: (a) => setState(() => _area = a),
+                    ),
+                    SortSelector(
+                      currentSort: _urutan,
+                      onSortChanged: (u) => setState(
+                        () => _urutan = u ?? SortOption.jarakTerdekat,
+                      ),
                     ),
                   ],
-                ),
-              );
-            }
+                );
+              }
 
-            final kos = hasil[index - 1];
-            return KartuKos(
-              kos: kos,
-              isFavorit: widget.idFavorit.contains(kos.id),
-              onToggleFavorit: () => widget.onToggleFavorit?.call(kos.id),
-            );
-          },
+              if (hasil.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Tidak ada kos yang cocok dengan filter ini.',
+                        style: teks.bodyMedium?.copyWith(
+                          color: warna.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: _resetFilter,
+                        child: const Text('Tampilkan semua kos'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              final kos = hasil[index - 1];
+              return KartuKos(
+                kos: kos,
+                isFavorit: widget.idFavorit.contains(kos.id),
+                onToggleFavorit: () => widget.onToggleFavorit?.call(kos.id),
+              );
+            },
+          ),
         );
       },
     );

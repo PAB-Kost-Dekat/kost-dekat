@@ -71,10 +71,12 @@ class HalamanUtamaState extends State<HalamanUtama> {
     });
   }
 
-  void muatUlang() {
+  /// Selesai saat data baru selesai dimuat (dipakai pull-to-refresh).
+  Future<void> muatUlang() {
     setState(() {
       _futureKos = _service.ambilDaftarKos();
     });
+    return _futureKos;
   }
 
   @override

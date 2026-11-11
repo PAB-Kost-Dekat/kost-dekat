@@ -175,7 +175,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | Poin | File:baris | Keterangan |
 |------|-----------|------------|
 | POST ulasan ke server (+5) | _ | _dikerjakan / tidak_ |
-| Pull-to-refresh (+2) | _ | _dikerjakan / tidak_ |
+| Pull-to-refresh (+2) | lib/halaman/tab_cari.dart:147 (daftar), lib/halaman/tab_cari.dart:71 (keadaan kosong/gagal) | Dikerjakan. Tarik ke bawah memanggil `muatUlang()` di HalamanUtama; indikator berhenti saat data selesai dimuat; keadaan gagal juga bisa ditarik. Diuji di test/pull_to_refresh_test.dart |
 | Hero kartu → detail (+3) | _ | _dikerjakan / tidak_ |
 
 ---
