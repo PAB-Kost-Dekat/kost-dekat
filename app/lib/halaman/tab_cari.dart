@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/kos.dart';
+import '../utils/format_rupiah.dart';
 import '../widget/kartu_kos.dart';
 
 /// Tab Cari yang menampilkan daftar kos dan keadaan memuat/gagal/berhasil.
@@ -100,6 +101,40 @@ class TabCari extends StatelessWidget {
               kos: kos,
               isFavorit: isFav,
               onToggleFavorit: () => onToggleFavorit?.call(kos.id),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+            return Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                leading: const Icon(Icons.apartment),
+                title: Text(kos.nama),
+                isThreeLine: true,
+                subtitle: Text.rich(
+                  TextSpan(
+                    text: '${kos.area}, ${kos.tipe}\n',
+                    children: [
+                      // Harga di baris sendiri karena itu yang dibandingkan pertama.
+                      TextSpan(
+                        text: CurrencyUtils.formatRupiah(kos.hargaBulanan),
+                        style: teks.titleSmall?.copyWith(color: warna.primary),
+                      ),
+                    ],
+                  ),
+                ),
+                trailing: IconButton(
+                  tooltip: isFav ? 'Hapus favorit' : 'Tambah favorit',
+                  icon: Icon(
+                    isFav ? Icons.favorite : Icons.favorite_border,
+                    color: isFav ? warna.error : null,
+                  ),
+                  onPressed: () => onToggleFavorit?.call(kos.id),
+                ),
+              ),
             );
           },
         );
