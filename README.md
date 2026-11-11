@@ -88,6 +88,93 @@ flutter test
 ```
 
 Target pemeriksaan: tidak ada error/warning dari `flutter analyze` dan seluruh test lulus. Jalankan juga pada emulator atau perangkat Android.
+---
+
+## 8. Alur Kerja Tim
+
+1. Ambil tiket di Jira, pindahkan ke **In Progress**.
+2. Buat branch dari `main`: `feat/SCRUM-<nomor>-<ringkas>`, contoh `feat/SCRUM-15-endpoint-area`.
+3. Commit diawali key Jira: `SCRUM-15 tambah endpoint GET /area`.
+4. Sebelum PR: `dart format lib test`, `flutter analyze`, `flutter test`.
+5. Buka Pull Request, isi template (termasuk baris File:baris untuk tabel README), minta 1 review.
+6. Setelah merge, pindahkan tiket ke **Done**.
+
+Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## 9. Tangkapan Layar
+
+| Cari | Detail | Form Ulasan | Favorit |
+|------|--------|-------------|---------|
+| ![Cari](screenshots/01_cari.png) | ![Detail](screenshots/02_detail.png) | ![Form](screenshots/03_form_ulasan.png) | ![Favorit](screenshots/04_favorit.png) |
+
+| Profil | Gagal memuat | Mode gelap |
+|--------|--------------|------------|
+| ![Profil](screenshots/05_profil.png) | ![Gagal](screenshots/06_gagal.png) | ![Gelap](screenshots/07_gelap.png) |
+
+---
+
+## 10. Tabel Pemenuhan Fitur
+
+> Kolom File:baris diisi setelah kode final di-merge. Path relatif terhadap `app/` kecuali diawali `server/`.
+
+### 10.1 Fitur wajib (Bagian 3)
+
+| Poin | File:baris | Keterangan |
+|------|-----------|------------|
+| P01–P02 Proyek dibuat dengan `flutter create --org id.ac.telkomuniversity`, paket bukan `com.example` | android/app/build.gradle(.kts):_ | applicationId `id.ac.telkomuniversity.kosdekat` |
+| P01–P02 Nama aplikasi di launcher sesuai tema (bukan `flutter_application_1`) | android/app/src/main/AndroidManifest.xml:_ | Label "KosDekat" |
+| P01–P02 Berjalan di emulator/HP Android, ≥ 4 tangkapan layar dari perangkat | screenshots/ | _n_ tangkapan layar dari _emulator/HP_ |
+| P01–P02 `flutter analyze` bersih (tanpa error maupun warning) | - | No issues found! |
+| P03 StatelessWidget & StatefulWidget buatan sendiri, setState mengubah tampilan | lib/_:_ | _ |
+| P03 TextField + TextEditingController di-dispose | lib/halaman/halaman_form_ulasan.dart:_ | Komentar ulasan |
+| P03 ≥ 2 jenis tombol Material 3 | lib/_:_ | FilledButton, IconButton, FloatingActionButton |
+| P03 ChoiceChip / FilterChip / SegmentedButton | lib/halaman/tab_cari.dart:_ | SegmentedButton tipe kos |
+| P03 SnackBar | lib/_:_ | "Ulasan tersimpan" |
+| P04 Model ≥ 6 field (DateTime & bool) | lib/model/kos.dart:_ | 8 field, `diperbarui` DateTime, `kamarMandiDalam` bool |
+| P04 Kartu buatan sendiri (Row, Column, Expanded, Stack) | lib/widget/kartu_kos.dart:_ | `KartuKos` |
+| P04 ListView.builder | lib/halaman/tab_cari.dart:_ | Daftar kos |
+| P04 NavigationBar ≥ 3 tab + IndexedStack | lib/halaman/halaman_utama.dart:_ | Cari · Favorit · Profil |
+| P05 Halaman detail menerima objek lewat konstruktor | lib/halaman/halaman_detail_kos.dart:_ | `HalamanDetailKos(kos: ...)` |
+| P05 Form tambah → `Navigator.pop(context, data)` → `await` → muncul di daftar | lib/halaman/halaman_detail_kos.dart:_ | Ulasan tampil di Detail & Profil |
+| P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:_ | `if (!mounted) return;` |
+| P05 ≥ 3 widget test di `test/`, `flutter test` lulus semua | test/widget_test.dart:_ | _n_ widget test |
+| P06 ColorScheme.fromSeed + darkTheme | lib/tema/tema_kosdekat.dart:_ | Seed `#______` |
+| P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/_:_ | Pengecualian: warna bintang |
+| P06 Font kustom | pubspec.yaml:_ | _nama font_ |
+| P06 Ikon launcher sendiri (flutter_launcher_icons) | pubspec.yaml:_ | assets/icon/ikon_kosdekat.png |
+| P06 Gambar aset lokal di pubspec.yaml | pubspec.yaml:_ | assets/images/ |
+| P07 `server/` shelf + shelf_router, data ≥ 12 item JSON | server/bin/server.dart:_ | server/data/kos.json: _n_ item |
+| P07 ≥ 3 endpoint GET | server/bin/server.dart:_ | `GET /kos`, `GET /kos/<id>`, `GET /area` |
+| P07 http + dart-define | lib/service/kos_service.dart:8 | API_URL dari `--dart-define` |
+| P07 fromJson/toJson + konversi DateTime | lib/model/kos.dart:_ | ISO 8601 |
+| P07 FutureBuilder 3 keadaan + tombol Coba lagi | lib/halaman/tab_cari.dart:_ | memuat / gagal / berhasil |
+| P07 Minimal satu test memakai MockClient | test/kos_service_test.dart | Menguji `KosService` tanpa server |
+
+### 10.2 Fitur khas KosDekat (Bagian 5)
+
+| Poin | File:baris | Keterangan |
+|------|-----------|------------|
+| Model `Kos` sesuai tema | lib/model/kos.dart:_ | id, nama, area, tipe, hargaBulanan, kamarMandiDalam, jarakKm, diperbarui |
+| Tab Cari · Favorit · Profil | lib/halaman/halaman_utama.dart:_ | |
+| Form ulasan: nama kos, rating 1–5 bintang yang bisa diketuk, komentar | lib/halaman/halaman_form_ulasan.dart:_ | Model `Ulasan` terpisah |
+| SegmentedButton Putra/Putri/Campur | lib/halaman/tab_cari.dart:_ | |
+| Urutan berdasarkan harga atau jarak | lib/halaman/tab_cari.dart:_ | Termurah / Terdekat |
+| Harga format Rupiah "Rp1.250.000/bln" | lib/util/format_rupiah.dart:_ | Diuji di test/format_rupiah_test.dart |
+| Endpoint khas `GET /area` | server/bin/server.dart:_ | Dipakai di lib/widget/ringkasan_area.dart |
+
+### 10.3 Nilai tambah (Bagian 7)
+
+| Poin | File:baris | Keterangan |
+|------|-----------|------------|
+| POST ulasan ke server (+5) | _ | _dikerjakan / tidak_ |
+| Pull-to-refresh (+2) | _ | _dikerjakan / tidak_ |
+| Hero kartu → detail (+3) | _ | _dikerjakan / tidak_ |
+
+---
+
+## 11. Catatan Desain
 
 ## Tangkapan layar perangkat
 Simpan minimal empat screenshot asli dari emulator/HP ke folder `screenshots/` dengan nama berikut (atau sesuaikan tautan di bawah):
