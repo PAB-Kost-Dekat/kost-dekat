@@ -143,8 +143,8 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P06 ColorScheme.fromSeed + darkTheme | lib/tema/tema_kosdekat.dart:_ | Seed `#______` |
 | P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/_:_ | Pengecualian: warna bintang |
 | P06 Font kustom | pubspec.yaml:_ | _nama font_ |
-| P06 Ikon launcher sendiri (flutter_launcher_icons) | pubspec.yaml:_ | assets/icon/ikon_kosdekat.png |
-| P06 Gambar aset lokal di pubspec.yaml | pubspec.yaml:_ | assets/images/ |
+| P06 Ikon launcher sendiri (flutter_launcher_icons) | pubspec.yaml:29 | assets/kosdekat_logo.png (512×512), hasil di android/app/src/main/res/mipmap-* |
+| P06 Gambar aset lokal di pubspec.yaml | pubspec.yaml:26 | assets/kos_illustration.png tampil di empty state lib/halaman/tab_favorit.dart:32 |
 | P07 `server/` shelf + shelf_router, data ≥ 12 item JSON | server/bin/server.dart:_ | server/data/kos.json: _n_ item |
 | P07 ≥ 3 endpoint GET | server/bin/server.dart:_ | `GET /kos`, `GET /kos/<id>`, `GET /area` |
 | P07 http + dart-define | lib/service/kos_service.dart:8 | API_URL dari `--dart-define` |

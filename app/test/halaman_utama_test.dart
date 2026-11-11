@@ -71,6 +71,10 @@ void main() {
       // Halaman Favorit tampil
       expect(find.text('Favorit'), findsWidgets);
       expect(find.text('Belum ada kos favorit yang ditandai.'), findsOneWidget);
+      expect(
+        find.image(const AssetImage('assets/kos_illustration.png')),
+        findsOneWidget,
+      );
 
       // Pindah ke tab Profil
       await tester.tap(find.text('Profil'));

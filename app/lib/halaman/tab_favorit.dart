@@ -28,7 +28,13 @@ class TabFavorit extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Favorit', style: teks.headlineMedium),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            Image.asset(
+              'assets/kos_illustration.png',
+              height: 160,
+              excludeFromSemantics: true,
+            ),
+            const SizedBox(height: 16),
             Text(
               'Belum ada kos favorit yang ditandai.',
               style: teks.bodyMedium?.copyWith(color: warna.onSurfaceVariant),
