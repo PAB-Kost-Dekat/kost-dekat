@@ -14,6 +14,7 @@ class HalamanDetailKos extends StatefulWidget {
     required this.kos,
     this.ulasanAwal = const [],
     this.onUlasanBaru,
+    this.kirimUlasan,
     this.isFavorit = false,
     this.onToggleFavorit,
   });
@@ -21,6 +22,9 @@ class HalamanDetailKos extends StatefulWidget {
   final Kos kos;
   final List<Ulasan> ulasanAwal;
   final ValueChanged<Ulasan>? onUlasanBaru;
+
+  /// POST ulasan ke server (KosService.kirimUlasan); null = hanya simpan lokal.
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
   final bool isFavorit;
   final VoidCallback? onToggleFavorit;
 
@@ -63,8 +67,31 @@ class _HalamanDetailKosState extends State<HalamanDetailKos> {
         _ulasanKos.insert(0, ulasanBaru);
       });
       widget.onUlasanBaru?.call(ulasanBaru);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Ulasan tersimpan')));
+
+      final kirim = widget.kirimUlasan;
+      if (kirim == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Ulasan tersimpan')));
+        return;
+      }
+
+      // Ulasan sudah tersimpan lokal; kegagalan POST tidak boleh membuat crash.
+      var terkirim = true;
+      try {
+        await kirim(ulasanBaru);
+      } catch (_) {
+        terkirim = false;
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            terkirim
+                ? 'Ulasan terkirim ke server'
+                : 'Gagal mengirim, ulasan disimpan di perangkat',
+          ),
+        ),
+      );
     }
   }
 

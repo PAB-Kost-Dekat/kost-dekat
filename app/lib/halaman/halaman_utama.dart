@@ -91,11 +91,17 @@ class HalamanUtamaState extends State<HalamanUtama> {
               idFavorit: _idFavorit,
               onToggleFavorit: toggleFavorit,
               onMuatUlang: muatUlang,
+              daftarUlasan: _daftarUlasan,
+              onUlasanBaru: tambahUlasan,
+              kirimUlasan: _service.kirimUlasan,
             ),
             TabFavorit(
               futureKos: _futureKos,
               idFavorit: _idFavorit,
               onToggleFavorit: toggleFavorit,
+              daftarUlasan: _daftarUlasan,
+              onUlasanBaru: tambahUlasan,
+              kirimUlasan: _service.kirimUlasan,
             ),
             TabProfil(
               namaPengguna: widget.namaPengguna,

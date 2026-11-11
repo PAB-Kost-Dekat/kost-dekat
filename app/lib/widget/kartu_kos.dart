@@ -13,6 +13,7 @@ class KartuKos extends StatelessWidget {
     super.key,
     required this.kos,
     this.onTap,
+    this.kirimUlasan,
     this.isFavorit = false,
     this.onToggleFavorit,
     this.daftarUlasan = const [],
@@ -21,6 +22,7 @@ class KartuKos extends StatelessWidget {
 
   final Kos kos;
   final VoidCallback? onTap;
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
   final bool isFavorit;
   final VoidCallback? onToggleFavorit;
   final List<Ulasan> daftarUlasan;
@@ -37,6 +39,7 @@ class KartuKos extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) => HalamanDetailKos(
           kos: kos,
+          kirimUlasan: kirimUlasan,
           ulasanAwal: daftarUlasan.where((u) => u.kosId == kos.id).toList(),
           onUlasanBaru: onUlasanBaru,
           isFavorit: isFavorit,
