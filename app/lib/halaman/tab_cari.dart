@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/kos.dart';
+import '../model/ulasan.dart';
 import '../widget/kartu_kos.dart';
 import '../widgets/area_chip_list.dart';
 import '../widgets/kategori_segmented_button.dart';
@@ -36,12 +37,16 @@ class TabCari extends StatefulWidget {
     super.key,
     required this.futureKos,
     required this.idFavorit,
+    this.daftarUlasan = const [],
+    this.onUlasanBaru,
     this.onToggleFavorit,
     this.onMuatUlang,
   });
 
   final Future<List<Kos>> futureKos;
   final Set<String> idFavorit;
+  final List<Ulasan> daftarUlasan;
+  final ValueChanged<Ulasan>? onUlasanBaru;
   final void Function(String id)? onToggleFavorit;
   final Future<void> Function()? onMuatUlang;
 
@@ -200,6 +205,8 @@ class _TabCariState extends State<TabCari> {
               final kos = hasil[index - 1];
               return KartuKos(
                 kos: kos,
+                daftarUlasan: widget.daftarUlasan,
+                onUlasanBaru: widget.onUlasanBaru,
                 isFavorit: widget.idFavorit.contains(kos.id),
                 onToggleFavorit: () => widget.onToggleFavorit?.call(kos.id),
               );

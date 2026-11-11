@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/kos.dart';
+import '../model/ulasan.dart';
 import '../widget/kartu_kos.dart';
 
 /// Tab Favorit yang menampilkan daftar kos yang telah ditandai pengguna.
@@ -10,11 +11,15 @@ class TabFavorit extends StatelessWidget {
     super.key,
     required this.futureKos,
     required this.idFavorit,
+    this.daftarUlasan = const [],
+    this.onUlasanBaru,
     this.onToggleFavorit,
   });
 
   final Future<List<Kos>> futureKos;
   final Set<String> idFavorit;
+  final List<Ulasan> daftarUlasan;
+  final ValueChanged<Ulasan>? onUlasanBaru;
   final void Function(String id)? onToggleFavorit;
 
   @override
@@ -67,6 +72,8 @@ class TabFavorit extends StatelessWidget {
               ...listKos.map(
                 (kos) => KartuKos(
                   kos: kos,
+                  daftarUlasan: daftarUlasan,
+                  onUlasanBaru: onUlasanBaru,
                   isFavorit: true,
                   onToggleFavorit: () => onToggleFavorit?.call(kos.id),
                 ),

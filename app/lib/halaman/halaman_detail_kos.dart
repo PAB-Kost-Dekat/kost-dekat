@@ -106,10 +106,10 @@ class _HalamanDetailKosState extends State<HalamanDetailKos> {
       ),
       body: ListView(
         children: [
-          // Gambar aset + placeholder jika belum ada di aset
+          // Ilustrasi bersama selama foto khusus tiap kos belum tersedia.
           ClipRRect(
             child: Image.asset(
-              'assets/images/kos_${kos.id}.png',
+              'assets/kos_illustration.png',
               width: double.infinity,
               height: 240,
               fit: BoxFit.cover,
