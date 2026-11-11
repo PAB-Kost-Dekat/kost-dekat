@@ -160,7 +160,7 @@ class _HalamanDetailKosState extends State<HalamanDetailKos> {
             warna,
             ClipRRect(
               child: Image.asset(
-                'assets/images/kos_${kos.id}.png',
+                'assets/images/kos_${kos.id}.jpeg',
                 width: double.infinity,
                 height: 240,
                 fit: BoxFit.cover,
