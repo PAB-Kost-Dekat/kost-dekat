@@ -8,11 +8,11 @@ Aplikasi Flutter untuk membantu mahasiswa menemukan kos di sekitar Telkom Univer
 - Anggota:
   | Nama | NIM | Tugas |
   |---|---|---|
-  | Arthur Budi Maharesi (ketua) | [NIM] | A1: server API shelf (`/kos`, `/kos/<id>`, `/area`), model `Kos`, ikon launcher & aset, halaman login, integrasi `main`, pull-to-refresh, Hero, kirim ulasan ke server |
-  | Rezka Dwi Anggoro | [NIM] | A2: model `Ulasan`, `KosService` + `API_URL`, test MockClient, widget test, `flutter analyze` & `flutter test` |
-  | Muhammad Althaf Arrajab | [NIM] | A3: kartu kos, tab Cari (FutureBuilder 3 keadaan), SegmentedButton tipe, urutan harga/jarak, chip area, format Rupiah |
+  | Arthur Budi Maharesi (ketua) | 1202022300304 | A1: server API shelf (`/kos`, `/kos/<id>`, `/area`), model `Kos`, ikon launcher & aset, halaman login, integrasi `main`, pull-to-refresh, Hero, kirim ulasan ke server |
+  | Rezka Dwi Anggoro | 102022300254 | A2: model `Ulasan`, `KosService` + `API_URL`, test MockClient, widget test, `flutter analyze` & `flutter test` |
+  | Muhammad Althaf Arrajab | 102022300422 | A3: kartu kos, tab Cari (FutureBuilder 3 keadaan), SegmentedButton tipe, urutan harga/jarak, chip area, format Rupiah |
   | Bahaa Azzikra Azhar Arma | [NIM] | A4: NavigationBar + IndexedStack, halaman detail, form ulasan, Navigator.pop + mounted + SnackBar, tab Favorit, tab Profil |
-  | Muhammad Rasyadan Agung Sedayu | [NIM] | A5: tema `ColorScheme.fromSeed` + mode gelap, font Plus Jakarta Sans, audit warna, `POST /ulasan` di server, dokumentasi |
+  | Muhammad Rasyadan Agung Sedayu |102022300312 | A5: tema `ColorScheme.fromSeed` + mode gelap, font Plus Jakarta Sans, audit warna, `POST /ulasan` di server, dokumentasi |
 
 ## Struktur repository
 ```text
