@@ -17,6 +17,9 @@ class KategoriSegmentedButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: SegmentedButton<TipeKosFilter>(
+        // Ikon centang membuat label "Semua" terpotong di layar 360dp;
+        // segmen terpilih tetap terlihat dari warna latarnya.
+        showSelectedIcon: false,
         segments: const [
           ButtonSegment(value: TipeKosFilter.semua, label: Text('Semua')),
           ButtonSegment(value: TipeKosFilter.putra, label: Text('Putra')),
