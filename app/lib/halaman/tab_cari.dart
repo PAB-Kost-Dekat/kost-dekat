@@ -202,6 +202,8 @@ class _TabCariState extends State<TabCari> {
                 kos: kos,
                 isFavorit: widget.idFavorit.contains(kos.id),
                 onToggleFavorit: () => widget.onToggleFavorit?.call(kos.id),
+                // Prefix per tab: tab Favorit hidup bersamaan di IndexedStack.
+                heroTag: 'cari-${kos.id}',
               );
             },
           ),

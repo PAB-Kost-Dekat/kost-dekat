@@ -176,7 +176,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 |------|-----------|------------|
 | POST ulasan ke server (+5) | _ | _dikerjakan / tidak_ |
 | Pull-to-refresh (+2) | lib/halaman/tab_cari.dart:147 (daftar), lib/halaman/tab_cari.dart:71 (keadaan kosong/gagal) | Dikerjakan. Tarik ke bawah memanggil `muatUlang()` di HalamanUtama; indikator berhenti saat data selesai dimuat; keadaan gagal juga bisa ditarik. Diuji di test/pull_to_refresh_test.dart |
-| Hero kartu → detail (+3) | _ | _dikerjakan / tidak_ |
+| Hero kartu → detail (+3) | lib/widget/kartu_kos.dart:55 + lib/halaman/halaman_detail_kos.dart:78 | Dikerjakan. Tag per tab (`cari-<id>`, `favorit-<id>`) agar tidak bentrok di IndexedStack. Diuji di test/hero_kartu_detail_test.dart |
 
 ---
 
