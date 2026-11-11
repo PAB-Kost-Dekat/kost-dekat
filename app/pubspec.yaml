@@ -22,6 +22,8 @@ flutter:
   assets:
     - assets/kosdekat_logo.png
     - assets/kos_illustration.png
+    # google_fonts memakai file ini lebih dulu, jadi font tetap tampil tanpa internet.
+    - assets/fonts/
 flutter_launcher_icons:
   android: true
   ios: false
