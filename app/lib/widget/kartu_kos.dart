@@ -13,18 +13,24 @@ class KartuKos extends StatelessWidget {
     super.key,
     required this.kos,
     this.onTap,
+    this.kirimUlasan,
     this.isFavorit = false,
     this.onToggleFavorit,
     this.daftarUlasan = const [],
     this.onUlasanBaru,
+    this.heroTag,
   });
 
   final Kos kos;
   final VoidCallback? onTap;
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
   final bool isFavorit;
   final VoidCallback? onToggleFavorit;
   final List<Ulasan> daftarUlasan;
   final ValueChanged<Ulasan>? onUlasanBaru;
+
+  /// Tag Hero gambar ke detail; harus unik per tab (mis. 'cari-kos-1').
+  final String? heroTag;
 
   void _bukaDetail(BuildContext context) {
     if (onTap != null) {
@@ -37,14 +43,19 @@ class KartuKos extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) => HalamanDetailKos(
           kos: kos,
+          kirimUlasan: kirimUlasan,
           ulasanAwal: daftarUlasan.where((u) => u.kosId == kos.id).toList(),
           onUlasanBaru: onUlasanBaru,
           isFavorit: isFavorit,
           onToggleFavorit: onToggleFavorit,
+          heroTag: heroTag,
         ),
       ),
     );
   }
+
+  Widget _bungkusHero(Widget gambar) =>
+      heroTag == null ? gambar : Hero(tag: heroTag!, child: gambar);
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +75,19 @@ class KartuKos extends StatelessWidget {
               // Bagian gambar dengan Stack (gambar, badge tipe, icon hati)
               Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      color: warna.surfaceContainerHighest,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.apartment,
-                        size: 40,
-                        color: warna.onSurfaceVariant,
+                  _bungkusHero(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        color: warna.surfaceContainerHighest,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.apartment,
+                          size: 40,
+                          color: warna.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ),
@@ -118,9 +131,8 @@ class KartuKos extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          tooltip: isFavorit
-                              ? 'Hapus favorit'
-                              : 'Tambah favorit',
+                          tooltip:
+                              isFavorit ? 'Hapus favorit' : 'Tambah favorit',
                           icon: Icon(
                             isFavorit ? Icons.favorite : Icons.favorite_border,
                             color: isFavorit ? warna.error : null,

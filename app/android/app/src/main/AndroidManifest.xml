@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Wajib agar build release (APK) bisa mengakses server API. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="kosdekat"
+        android:label="KosDekat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

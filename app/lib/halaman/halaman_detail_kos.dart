@@ -14,15 +14,23 @@ class HalamanDetailKos extends StatefulWidget {
     required this.kos,
     this.ulasanAwal = const [],
     this.onUlasanBaru,
+    this.kirimUlasan,
     this.isFavorit = false,
     this.onToggleFavorit,
+    this.heroTag,
   });
 
   final Kos kos;
   final List<Ulasan> ulasanAwal;
   final ValueChanged<Ulasan>? onUlasanBaru;
+
+  /// POST ulasan ke server (KosService.kirimUlasan); null = hanya simpan lokal.
+  final Future<void> Function(Ulasan ulasan)? kirimUlasan;
   final bool isFavorit;
   final VoidCallback? onToggleFavorit;
+
+  /// Sama persis dengan tag di [KartuKos] yang membuka halaman ini.
+  final String? heroTag;
 
   @override
   State<HalamanDetailKos> createState() => _HalamanDetailKosState();
@@ -63,9 +71,50 @@ class _HalamanDetailKosState extends State<HalamanDetailKos> {
         _ulasanKos.insert(0, ulasanBaru);
       });
       widget.onUlasanBaru?.call(ulasanBaru);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Ulasan tersimpan')));
+
+      final kirim = widget.kirimUlasan;
+      if (kirim == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Ulasan tersimpan')));
+        return;
+      }
+
+      // Ulasan sudah tersimpan lokal; kegagalan POST tidak boleh membuat crash.
+      var terkirim = true;
+      try {
+        await kirim(ulasanBaru);
+      } catch (_) {
+        terkirim = false;
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            terkirim
+                ? 'Ulasan terkirim ke server'
+                : 'Gagal mengirim, ulasan disimpan di perangkat',
+          ),
+        ),
+      );
     }
+  }
+
+  Widget _bungkusHero(ColorScheme warna, Widget gambar) {
+    final tag = widget.heroTag;
+    if (tag == null) return gambar;
+    return Hero(
+      tag: tag,
+      // Isi gambar detail (ikon + teks) akan overflow bila diperkecil saat terbang,
+      // jadi selama animasi tampilkan kotak polos yang ikonnya ikut menyesuaikan.
+      flightShuttleBuilder: (konteks, animasi, arah, dari, ke) => Container(
+        color: warna.primaryContainer,
+        padding: const EdgeInsets.all(8),
+        child: FittedBox(
+          child: Icon(Icons.apartment, color: warna.onPrimaryContainer),
+        ),
+      ),
+      child: gambar,
+    );
   }
 
   double get _rataRataRating {
@@ -106,38 +155,41 @@ class _HalamanDetailKosState extends State<HalamanDetailKos> {
       ),
       body: ListView(
         children: [
-          // Ilustrasi bersama selama foto khusus tiap kos belum tersedia.
-          ClipRRect(
-            child: Image.asset(
-              'assets/kos_illustration.png',
-              width: double.infinity,
-              height: 240,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: double.infinity,
-                  height: 240,
-                  color: warna.primaryContainer,
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.apartment,
-                        size: 72,
-                        color: warna.onPrimaryContainer,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        kos.nama,
-                        style: teks.titleMedium?.copyWith(
+          // Gambar aset + placeholder jika belum ada di aset
+          _bungkusHero(
+            warna,
+            ClipRRect(
+              child: Image.asset(
+                'assets/images/kos_${kos.id}.jpeg',
+                width: double.infinity,
+                height: 240,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: double.infinity,
+                    height: 240,
+                    color: warna.primaryContainer,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.apartment,
+                          size: 72,
                           color: warna.onPrimaryContainer,
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        const SizedBox(height: 8),
+                        Text(
+                          kos.nama,
+                          style: teks.titleMedium?.copyWith(
+                            color: warna.onPrimaryContainer,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Padding(

@@ -76,9 +76,14 @@ Future<void> main() async {
         body: jsonEncode({'message': 'Field kosId wajib diisi'}),
         headers: {'content-type': 'application/json'});
     }
-    if (rating == null || rating is! num || rating < 1 || rating > 5) {
+    if (!kos.any((item) => item['id'] == kosId.toString())) {
+      return Response.notFound(jsonEncode({'message': 'Kos tidak ditemukan'}),
+        headers: {'content-type': 'application/json'});
+    }
+    // Hanya bilangan bulat; 4.7 tidak boleh dibulatkan diam-diam.
+    if (rating == null || rating is! int || rating < 1 || rating > 5) {
       return Response(400,
-        body: jsonEncode({'message': 'Field rating harus angka 1–5'}),
+        body: jsonEncode({'message': 'Field rating harus bilangan bulat 1–5'}),
         headers: {'content-type': 'application/json'});
     }
     if (komentar == null || komentar.toString().trim().isEmpty) {
@@ -86,14 +91,24 @@ Future<void> main() async {
         body: jsonEncode({'message': 'Field komentar tidak boleh kosong'}),
         headers: {'content-type': 'application/json'});
     }
+    // Tanggal rusak akan membuat klien gagal mem-parse GET /ulasan.
+    final tanggalMentah = body['tanggal'];
+    final tanggal = tanggalMentah == null
+        ? DateTime.now()
+        : DateTime.tryParse(tanggalMentah.toString());
+    if (tanggal == null) {
+      return Response(400,
+        body: jsonEncode({'message': 'Field tanggal harus format ISO 8601'}),
+        headers: {'content-type': 'application/json'});
+    }
 
     final ulasan = {
       'id': 'u${daftarUlasan.length + 1}',
       'kosId': kosId.toString(),
       'namaKos': body['namaKos']?.toString() ?? '',
-      'rating': rating.toInt(),
+      'rating': rating,
       'komentar': komentar.toString().trim(),
-      'tanggal': body['tanggal']?.toString() ?? DateTime.now().toIso8601String(),
+      'tanggal': tanggal.toIso8601String(),
     };
     daftarUlasan.add(ulasan);
 
