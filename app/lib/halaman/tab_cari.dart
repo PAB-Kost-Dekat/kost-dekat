@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/kos.dart';
+import '../utils/format_rupiah.dart';
 
 /// Tab Cari yang menampilkan daftar kos dan keadaan memuat/gagal/berhasil.
 /// Kerangka ini menjadi fondasi bagi A3 untuk melengkapi filter & fitur khas (SCRUM-22).
@@ -57,33 +58,42 @@ class TabCari extends StatelessWidget {
 
         final data = snapshot.data ?? [];
 
+        if (data.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Belum ada kos yang terdaftar.',
+                    style: teks.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Data kos dari server masih kosong. Muat ulang setelah data ditambahkan.',
+                    style: teks.bodyMedium?.copyWith(
+                      color: warna.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  FilledButton(
+                    onPressed: onMuatUlang,
+                    child: const Text('Muat ulang'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         return ListView.builder(
           key: const PageStorageKey<String>('list_tab_cari'),
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-          itemCount: data.isEmpty ? 20 : data.length,
+          itemCount: data.length,
           itemBuilder: (context, index) {
-            if (data.isEmpty) {
-              // Daftar scrollable placeholder untuk menjaga posisi scroll sebelum SCRUM-22 di-merge
-              final idItem = 'placeholder-$index';
-              final isFav = idFavorit.contains(idItem);
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListTile(
-                  leading: const Icon(Icons.home_outlined),
-                  title: Text('Kos Sekitar Kampus ${index + 1}'),
-                  subtitle: const Text('Daftar kos siap dipasang (SCRUM-22)'),
-                  trailing: IconButton(
-                    tooltip: isFav ? 'Hapus favorit' : 'Tambah favorit',
-                    icon: Icon(
-                      isFav ? Icons.favorite : Icons.favorite_border,
-                      color: isFav ? warna.error : null,
-                    ),
-                    onPressed: () => onToggleFavorit?.call(idItem),
-                  ),
-                ),
-              );
-            }
-
             final kos = data[index];
             final isFav = idFavorit.contains(kos.id);
             return Card(
@@ -91,8 +101,18 @@ class TabCari extends StatelessWidget {
               child: ListTile(
                 leading: const Icon(Icons.apartment),
                 title: Text(kos.nama),
-                subtitle: Text(
-                  '${kos.area} • ${kos.tipe} • Rp${kos.hargaBulanan}/bln',
+                isThreeLine: true,
+                subtitle: Text.rich(
+                  TextSpan(
+                    text: '${kos.area}, ${kos.tipe}\n',
+                    children: [
+                      // Harga di baris sendiri karena itu yang dibandingkan pertama.
+                      TextSpan(
+                        text: CurrencyUtils.formatRupiah(kos.hargaBulanan),
+                        style: teks.titleSmall?.copyWith(color: warna.primary),
+                      ),
+                    ],
+                  ),
                 ),
                 trailing: IconButton(
                   tooltip: isFav ? 'Hapus favorit' : 'Tambah favorit',
@@ -110,4 +130,3 @@ class TabCari extends StatelessWidget {
     );
   }
 }
-

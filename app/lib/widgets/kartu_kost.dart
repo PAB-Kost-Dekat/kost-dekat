@@ -11,6 +11,8 @@ class KartuKost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final teks = Theme.of(context).textTheme;
+    final warna = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -27,16 +29,16 @@ class KartuKost extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: Stack(
                   children: [
-                    Image.network(
-                      'https://picsum.photos/200?id=${kos.id}',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
+                    // Tag harus sama dengan Hero di DetailKosPage.
+                    Hero(
+                      tag: 'kos-img-${kos.id}',
+                      // shortcut: ilustrasi yang sama untuk semua kos, ganti dengan foto asli tiap kos bila ada.
+                      child: Image.asset(
+                        'assets/kos_illustration.png',
                         width: 100,
                         height: 100,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.image_not_supported),
+                        fit: BoxFit.cover,
+                        excludeFromSemantics: true,
                       ),
                     ),
                     Positioned(
@@ -48,14 +50,13 @@ class KartuKost extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black54,
+                          color: warna.primaryContainer,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           kos.tipe,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
+                          style: teks.labelSmall?.copyWith(
+                            color: warna.onPrimaryContainer,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -71,8 +72,7 @@ class KartuKost extends StatelessWidget {
                   children: [
                     Text(
                       kos.nama,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: teks.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
@@ -81,18 +81,17 @@ class KartuKost extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.location_on,
                           size: 14,
-                          color: Colors.grey,
+                          color: warna.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             kos.area,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
+                            style: teks.bodySmall?.copyWith(
+                              color: warna.onSurfaceVariant,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -103,34 +102,31 @@ class KartuKost extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.directions_walk,
                           size: 14,
-                          color: Colors.blue,
+                          color: warna.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          '${kos.jarakKm} km',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
+                        Text('${kos.jarakKm} km', style: teks.bodySmall),
+                        if (kos.kamarMandiDalam) ...[
+                          const SizedBox(width: 12),
+                          Icon(
+                            Icons.shower_outlined,
+                            size: 14,
+                            color: warna.onSurfaceVariant,
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        if (kos.kamarMandiDalam)
-                          const Text(
-                            '• KM Dalam',
-                            style: TextStyle(fontSize: 12, color: Colors.green),
-                          ),
+                          const SizedBox(width: 4),
+                          Text('KM dalam', style: teks.bodySmall),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       CurrencyUtils.formatRupiah(kos.hargaBulanan),
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: teks.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: warna.primary,
                       ),
                     ),
                   ],

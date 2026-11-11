@@ -63,6 +63,7 @@ void main() {
       // Tab default adalah Cari
       expect(find.byType(NavigationBar), findsOneWidget);
       expect(find.text('Kos Melati Indah'), findsOneWidget);
+      expect(find.textContaining('Rp1.250.000/bln'), findsOneWidget);
 
       // Pindah ke tab Favorit
       await tester.tap(find.text('Favorit'));
@@ -116,19 +117,15 @@ void main() {
       await tester.pumpAndSettle();
 
       final scrollableFinder = find.byType(Scrollable).first;
-      final offsetSebelum = tester
-          .state<ScrollableState>(scrollableFinder)
-          .position
-          .pixels;
+      final offsetSebelum =
+          tester.state<ScrollableState>(scrollableFinder).position.pixels;
 
       // Gulir ke bawah
       await tester.drag(scrollableFinder, const Offset(0, -300));
       await tester.pumpAndSettle();
 
-      final offsetSetelahScroll = tester
-          .state<ScrollableState>(scrollableFinder)
-          .position
-          .pixels;
+      final offsetSetelahScroll =
+          tester.state<ScrollableState>(scrollableFinder).position.pixels;
       expect(offsetSetelahScroll, greaterThan(offsetSebelum));
 
       // Pindah ke tab Favorit
@@ -140,13 +137,29 @@ void main() {
       await tester.pumpAndSettle();
 
       // Posisi scroll tetap terjaga karena menggunakan IndexedStack
-      final offsetSetelahKembali = tester
-          .state<ScrollableState>(scrollableFinder)
-          .position
-          .pixels;
+      final offsetSetelahKembali =
+          tester.state<ScrollableState>(scrollableFinder).position.pixels;
       expect(offsetSetelahKembali, equals(offsetSetelahScroll));
     },
   );
+
+  testWidgets('Data kosong menampilkan keadaan kosong, bukan kos contoh', (
+    tester,
+  ) async {
+    var callCount = 0;
+    final service = buatService(data: [], onRequest: () => callCount++);
+    await tester.pumpWidget(
+      MaterialApp(home: HalamanUtama(kosService: service)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Belum ada kos yang terdaftar.'), findsOneWidget);
+    expect(find.textContaining('Kos Sekitar Kampus'), findsNothing);
+
+    await tester.tap(find.text('Muat ulang'));
+    await tester.pumpAndSettle();
+    expect(callCount, equals(2));
+  });
 
   testWidgets('Pindah tab tidak memanggil server ulang', (tester) async {
     var callCount = 0;

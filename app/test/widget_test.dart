@@ -13,9 +13,8 @@ void main() {
     testWidgets('KosDekatApp tampil di tema ${terang ? 'terang' : 'gelap'}', (
       tester,
     ) async {
-      tester.platformDispatcher.platformBrightnessTestValue = terang
-          ? Brightness.light
-          : Brightness.dark;
+      tester.platformDispatcher.platformBrightnessTestValue =
+          terang ? Brightness.light : Brightness.dark;
       addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
 
       await tester.pumpWidget(const KosDekatApp());
@@ -54,5 +53,10 @@ void main() {
 
     expect(find.text('Kos Melati Indah (contoh)'), findsOneWidget);
     expect(find.text('Rp1.250.000/bln'), findsOneWidget);
+    // Tag harus sama dengan DetailKosPage agar animasi Hero berjalan.
+    expect(
+      tester.widget<Hero>(find.byType(Hero)).tag,
+      equals('kos-img-${kos.id}'),
+    );
   });
 }

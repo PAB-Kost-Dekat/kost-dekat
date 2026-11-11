@@ -10,6 +10,7 @@ class DetailKosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final warna = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(title: Text(kos.nama)),
       body: SingleChildScrollView(
@@ -18,11 +19,12 @@ class DetailKosPage extends StatelessWidget {
           children: [
             Hero(
               tag: 'kos-img-${kos.id}',
-              child: Image.network(
-                'https://picsum.photos/400?id=${kos.id}',
+              child: Image.asset(
+                'assets/kos_illustration.png',
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
+                excludeFromSemantics: true,
               ),
             ),
             Padding(
@@ -40,15 +42,18 @@ class DetailKosPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     kos.area,
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: warna.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     CurrencyUtils.formatRupiah(kos.hargaBulanan),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: warna.primary,
                     ),
                   ),
                   const Divider(height: 24),
@@ -69,7 +74,10 @@ class DetailKosPage extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Diperbarui: ${kos.diperbarui.toLocal().toString().split(".")[0]}',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: warna.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
