@@ -11,10 +11,33 @@ final themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
 final temaTerang = ThemeData(
   useMaterial3: true,
   fontFamily: 'PlusJakartaSans',
+/// Warna bintang rating, satu-satunya warna di luar ColorScheme (pengecualian P06).
+class WarnaKosDekat extends ThemeExtension<WarnaKosDekat> {
+  const WarnaKosDekat({required this.bintang});
+
+  final Color bintang;
+
+  @override
+  WarnaKosDekat copyWith({Color? bintang}) =>
+      WarnaKosDekat(bintang: bintang ?? this.bintang);
+
+  @override
+  WarnaKosDekat lerp(WarnaKosDekat? other, double t) =>
+      WarnaKosDekat(bintang: Color.lerp(bintang, other?.bintang, t)!);
+}
+
+/// Pengatur mode tema (default: ThemeMode.system).
+final themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
+
+/// Tema terang khas KosDekat.
+final temaTerang = ThemeData(
+  useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
     seedColor: warnaSeed,
     brightness: Brightness.light,
   ),
+  // Amber gelap agar kontras bintang di latar terang tetap >= 3:1.
+  extensions: const [WarnaKosDekat(bintang: Color(0xFFB26A00))],
   textTheme: GoogleFonts.plusJakartaSansTextTheme(),
   appBarTheme: const AppBarTheme(
     centerTitle: false,
@@ -54,6 +77,7 @@ final temaGelap = ThemeData(
     seedColor: warnaSeed,
     brightness: Brightness.dark,
   ),
+  extensions: const [WarnaKosDekat(bintang: Color(0xFFFFC107))],
   textTheme: GoogleFonts.plusJakartaSansTextTheme(
     ThemeData.dark().textTheme,
   ),
