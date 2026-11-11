@@ -4,6 +4,21 @@ import 'package:google_fonts/google_fonts.dart';
 /// Seed color diambil dari referensi Dribbble "Papa Kost" (Kretya Studio): #14695C (deep pine green / teal).
 const warnaSeed = Color(0xFF14695C);
 
+/// Warna bintang rating, satu-satunya warna di luar ColorScheme (pengecualian P06).
+class WarnaKosDekat extends ThemeExtension<WarnaKosDekat> {
+  const WarnaKosDekat({required this.bintang});
+
+  final Color bintang;
+
+  @override
+  WarnaKosDekat copyWith({Color? bintang}) =>
+      WarnaKosDekat(bintang: bintang ?? this.bintang);
+
+  @override
+  WarnaKosDekat lerp(WarnaKosDekat? other, double t) =>
+      WarnaKosDekat(bintang: Color.lerp(bintang, other?.bintang, t)!);
+}
+
 /// Pengatur mode tema (default: ThemeMode.system).
 final themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
 
@@ -14,6 +29,8 @@ final temaTerang = ThemeData(
     seedColor: warnaSeed,
     brightness: Brightness.light,
   ),
+  // Amber gelap agar kontras bintang di latar terang tetap >= 3:1.
+  extensions: const [WarnaKosDekat(bintang: Color(0xFFB26A00))],
   textTheme: GoogleFonts.plusJakartaSansTextTheme(),
   appBarTheme: const AppBarTheme(
     centerTitle: false,
@@ -52,6 +69,7 @@ final temaGelap = ThemeData(
     seedColor: warnaSeed,
     brightness: Brightness.dark,
   ),
+  extensions: const [WarnaKosDekat(bintang: Color(0xFFFFC107))],
   textTheme: GoogleFonts.plusJakartaSansTextTheme(
     ThemeData.dark().textTheme,
   ),
@@ -84,4 +102,3 @@ final temaGelap = ThemeData(
     ),
   ),
 );
-

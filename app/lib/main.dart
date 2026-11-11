@@ -16,12 +16,6 @@ class KosDekatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'KosDekat',
-      theme: temaTerang,
-      darkTheme: temaGelap,
-      themeMode: ThemeMode.system,
-      home: home ?? HalamanLogin(kosService: kosService),
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeModeNotifier,
       builder: (context, mode, _) => MaterialApp(

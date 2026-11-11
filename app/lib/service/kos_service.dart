@@ -53,6 +53,7 @@ class KosService {
       jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>,
     );
   }
+
   void dispose() => _client.close();
 
   Future<Object?> _ambilJson(String path) async {
@@ -63,9 +64,5 @@ class KosService {
       throw Exception('Gagal memuat data (kode ${response.statusCode})');
     }
     return jsonDecode(utf8.decode(response.bodyBytes));
-  }
-
-  void dispose() {
-    _client.close();
   }
 }
