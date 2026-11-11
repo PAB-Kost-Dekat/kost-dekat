@@ -130,7 +130,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P03 StatelessWidget & StatefulWidget buatan sendiri, setState mengubah tampilan | lib/_:_ | _ |
 | P03 TextField + TextEditingController di-dispose | lib/halaman/halaman_form_ulasan.dart:28 | komentar & nama kos |
 | Fitur khas: Form ulasan + bintang | lib/halaman/halaman_form_ulasan.dart:68 | 5 IconButton bintang yang bisa diketuk |
-| P03 ≥ 2 jenis tombol Material 3 | lib/_:_ | FilledButton, IconButton, FloatingActionButton |
+| P03 ≥ 2 jenis tombol Material 3 | lib/halaman/halaman_form_ulasan.dart:112, lib/widget/kartu_kos.dart:120, lib/halaman/halaman_detail_kos.dart:318 | FilledButton ("Kirim Ulasan"), IconButton (hati favorit), FloatingActionButton.extended ("Tulis Ulasan"); juga OutlinedButton "Keluar" di tab_profil.dart:92 |
 | P03 ChoiceChip / FilterChip / SegmentedButton | lib/halaman/tab_cari.dart:_ | SegmentedButton tipe kos |
 | P03 SnackBar | lib/_:_ | "Ulasan tersimpan" |
 | P04 Model ≥ 6 field (DateTime & bool) | lib/model/kos.dart:_ | 8 field, `diperbarui` DateTime, `kamarMandiDalam` bool |
