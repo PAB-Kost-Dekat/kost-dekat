@@ -124,7 +124,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | Poin | File:baris | Keterangan |
 |------|-----------|------------|
 | P01–P02 Proyek dibuat dengan `flutter create --org id.ac.telkomuniversity`, paket bukan `com.example` | android/app/build.gradle(.kts):_ | applicationId `id.ac.telkomuniversity.kosdekat` |
-| P01–P02 Nama aplikasi di launcher sesuai tema (bukan `flutter_application_1`) | android/app/src/main/AndroidManifest.xml:_ | Label "KosDekat" |
+| P01–P02 Nama aplikasi di launcher sesuai tema (bukan `flutter_application_1`) | android/app/src/main/AndroidManifest.xml:3 | Label "KosDekat" |
 | P01–P02 Berjalan di emulator/HP Android, ≥ 4 tangkapan layar dari perangkat | screenshots/ | _n_ tangkapan layar dari _emulator/HP_ |
 | P01–P02 `flutter analyze` bersih (tanpa error maupun warning) | - | No issues found! |
 | P03 StatelessWidget & StatefulWidget + setState | lib/widget/kartu_kos.dart:11 (Stateless), lib/halaman/halaman_form_ulasan.dart:8,80 (Stateful + setState bintang) | KartuKos (Stateless) & HalamanFormUlasan (Stateful); setState mengetuk bintang mengubah tampilan bintang rating |
@@ -146,7 +146,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P05 Cek `mounted` setelah `await` | lib/halaman/halaman_detail_kos.dart:_ | `if (!mounted) return;` |
 | P05 ≥3 widget test | `test/widget_test.dart:10,29` dan `test/halaman_login_test.dart:30,43,54,78,105` | 8 widget test (2 tema, 1 kartu kos, 5 login dan Profil) |
 | P06 ColorScheme.fromSeed + darkTheme | lib/tema/tema_kosdekat.dart:_ | Seed `#______` |
-| P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/_:_ | Pengecualian: warna bintang |
+| P06 Warna dari `Theme.of(context).colorScheme` (≤ 3 pengecualian) | lib/tema/tema_kosdekat.dart:33, lib/tema/tema_kosdekat.dart:72 | 2 pengecualian, keduanya warna bintang rating lewat `WarnaKosDekat`: amber gelap #B26A00 (terang, kontras ≥ 3:1) dan amber #FFC107 (gelap). Selain itu semua warna dari `colorScheme`; `Color(0xFF14695C)` di baris 5 adalah seed `ColorScheme.fromSeed` |
 | P06 Font kustom | pubspec.yaml:_ | _nama font_ |
 | P06 Ikon launcher sendiri (flutter_launcher_icons) | pubspec.yaml:29 | assets/kosdekat_logo.png (512×512), hasil di android/app/src/main/res/mipmap-* |
 | P06 Gambar aset lokal di pubspec.yaml | pubspec.yaml:26 | assets/kos_illustration.png tampil di empty state lib/halaman/tab_favorit.dart:32 |

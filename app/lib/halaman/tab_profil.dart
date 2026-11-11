@@ -65,8 +65,7 @@ class TabProfil extends StatelessWidget {
     final teks = Theme.of(context).textTheme;
     final warna = Theme.of(context).colorScheme;
     final warnaBintang =
-        Theme.of(context).extension<WarnaKosDekat>()?.bintang ??
-            const Color(0xFFB26A00);
+        Theme.of(context).extension<WarnaKosDekat>()?.bintang ?? warna.primary;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
