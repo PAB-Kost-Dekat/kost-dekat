@@ -131,7 +131,7 @@ Detail lengkap ada di [CONTRIBUTING.md](CONTRIBUTING.md).
 | P03 TextField + TextEditingController di-dispose | lib/halaman/halaman_form_ulasan.dart:28 | komentar & nama kos |
 | Fitur khas: Form ulasan + bintang | lib/halaman/halaman_form_ulasan.dart:68 | 5 IconButton bintang yang bisa diketuk |
 | P03 ≥ 2 jenis tombol Material 3 | lib/halaman/halaman_form_ulasan.dart:112, lib/widget/kartu_kos.dart:120, lib/halaman/halaman_detail_kos.dart:318 | FilledButton ("Kirim Ulasan"), IconButton (hati favorit), FloatingActionButton.extended ("Tulis Ulasan"); juga OutlinedButton "Keluar" di tab_profil.dart:92 |
-| P03 ChoiceChip / FilterChip / SegmentedButton | lib/halaman/tab_cari.dart:_ | SegmentedButton tipe kos |
+| P03 ChoiceChip / FilterChip / SegmentedButton | lib/halaman/tab_cari.dart:150, lib/halaman/tab_cari.dart:154 | SegmentedButton tipe kos (lib/widgets/kategori_segmented_button.dart) dan ChoiceChip area (lib/widgets/area_chip_list.dart) menyaring daftar lewat `saringKos` |
 | P03 SnackBar | lib/_:_ | "Ulasan tersimpan" |
 | P04 Model ≥ 6 field (DateTime & bool) | lib/model/kos.dart:_ | 8 field, `diperbarui` DateTime, `kamarMandiDalam` bool |
 | P04 Kartu buatan sendiri (Row, Column, Expanded, Stack) | lib/widget/kartu_kos.dart:55-190 | `KartuKos` |

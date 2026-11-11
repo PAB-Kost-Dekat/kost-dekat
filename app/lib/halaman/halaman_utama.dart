@@ -45,13 +45,24 @@ class HalamanUtamaState extends State<HalamanUtama> {
   }
 
   void toggleFavorit(String id) {
+    final ditambah = !_idFavorit.contains(id);
     setState(() {
-      if (_idFavorit.contains(id)) {
-        _idFavorit.remove(id);
-      } else {
+      if (ditambah) {
         _idFavorit.add(id);
+      } else {
+        _idFavorit.remove(id);
       }
     });
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            ditambah ? 'Ditambahkan ke Favorit' : 'Dihapus dari Favorit',
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
 
   void tambahUlasan(Ulasan u) {
